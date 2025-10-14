@@ -1,4 +1,4 @@
-### Functions used for the paper                      ### 
+###             Functions used in                     ### 
 ### Incomplete U-Statistics of Equireplicate Designs: ###
 ### Berry-Esseen Bound and Efficient Construction     ###
 

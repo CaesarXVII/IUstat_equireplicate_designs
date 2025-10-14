@@ -1,4 +1,4 @@
-### Simulations studies for the paper                 ### 
+###           Simulations studies for                 ### 
 ### Incomplete U-Statistics of Equireplicate Designs: ###
 ### Berry-Esseen Bound and Efficient Construction     ###
 
