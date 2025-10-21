@@ -2,7 +2,7 @@
 ### Incomplete U-Statistics of Equireplicate Designs: ###
 ### Berry-Esseen Bound and Efficient Construction     ###
 
-## Remark 7, Section 4 ##
+## Remark 6, Section 4 ##
 
 equirep_even <- function(n,r) {
   

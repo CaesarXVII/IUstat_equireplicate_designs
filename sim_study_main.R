@@ -12,7 +12,7 @@ library(ggplot2)
 
 library(doParallel)
 
-## Remark 7, Section 4 ##
+## Remark 6, Section 4 ##
 
 t_even <- system.time({
 
