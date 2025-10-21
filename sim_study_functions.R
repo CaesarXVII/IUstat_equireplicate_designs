@@ -196,12 +196,16 @@ cyclic_design <- function(n = 37,k = 3, r=3, eta= 2^x) {
   k <- length(blocks[[1]])
   n_blocks <- length(blocks)
   
+  # replace zeros with n
+  blocks <- lapply(blocks, function(x) replace(x, x == 0, n))
+  
   mat <- matrix(NA_integer_, nrow = n_blocks, ncol = k)
   
   for (i in seq_len(n_blocks)) {
+    
     mat[i, ] <- blocks[[i]]
   }
-  
+
   return(list(blocks, mat))
 }
 

@@ -150,8 +150,6 @@ results1 <- foreach(s = 1:itpar, .combine = 'c', .inorder = TRUE,
                        tab_mc = tab_mat3
                      )
                      
-                     #list(list(output = output))
-                     
                      list(output)
                      
                    }
@@ -210,9 +208,7 @@ results2 <- foreach(s = 1:itpar, .combine = 'c', .inorder = TRUE,
                          D_size <- n*r/2
                          
                          D_equi <- equirep_even(n = n,r = r)
-                         
-                         #set.seed(j+ s*length(n_vec))
-                         
+                        
                          set.seed(s)
                          
                          D_rand <- randes_full_k2(n = n,B = D_size)
@@ -266,7 +262,7 @@ results2 <- foreach(s = 1:itpar, .combine = 'c', .inorder = TRUE,
 
 stopCluster(cl)
 
-save.image(file = "sim_study_twoc.Rdata")
+save.image(file = "sim_study_two.Rdata")
 
 ## Simulation Study 3 - CLT validation for k>2 (see Theorem 3.8) ##
 
@@ -346,7 +342,7 @@ results3 <- foreach(s = 1:itpar, .combine = 'c', .inorder = TRUE,
                            
                            D <- cyclic_design(n = n,k = k,r = r,eta = eta)
                            
-                           D_equi <- D[[2]]+1
+                           D_equi <- D[[2]]
                            
                          }
                          
@@ -416,17 +412,13 @@ results3 <- foreach(s = 1:itpar, .combine = 'c', .inorder = TRUE,
                        tab_mc = tab_mat3
                      )
                      
-                     #return(output)
-                     
-                     #list(list(output = output))
-                     
                      list(output)
                      
                    }
 
 stopCluster(cl)
 
-save.image(file = "sim_study_threeg.Rdata")
+save.image(file = "sim_study_three.Rdata")
 
 ## Simulation Study 4 - Minimum Variance (see Section 4: Efficient Construction of Equireplicate Designs) ##
 
@@ -499,12 +491,10 @@ results4 <- foreach(s = 1:itpar, .combine = 'c', .inorder = TRUE,
                             
                             D <- cyclic_design(n = n,k = k,r = r,eta = eta)
                             
-                            D_equi <- D[[2]]+1
+                            D_equi <- D[[2]]
                             
                           }
-                          
-                          #set.seed(j+ s*length(n_vec))
-                          
+                     
                           set.seed(s)
                           
                           #D_rand <- randes_full_k4(n = n,B = D_size) #comp.intensive
@@ -566,7 +556,7 @@ results4 <- foreach(s = 1:itpar, .combine = 'c', .inorder = TRUE,
 
 stopCluster(cl)
 
-save.image(file = "sim_study_fourb.Rdata")
+save.image(file = "sim_study_four.Rdata")
 
 ## Simulation Study 5 - Real Data Example (Power, Type I error, Computational burden) ##
 
@@ -576,9 +566,9 @@ n_vec <- c(100,200,400,800,1600)
 
 r_vec <- c(ceiling(log(n_vec[1])), ceiling(log(n_vec[1])^2))  
     
-kx <- c(3,4,8, 9) #c(3,4,8, 9,6) -> (cat, deer, ship, truck, frog)
-  
-ky <- c(0,1,5,7) #c(0,1,5,7,2) -> (airplane, automobile, dog, horse,bird)
+kx <- c(3,4,8, 9) 
+
+ky <- c(0,1,5,7) 
 
 c <- 1 #0  
 
@@ -657,8 +647,6 @@ resultsA <- foreach(s = 251:n_sim, .combine = 'c', .inorder = TRUE,
                         t_mat_rand = t_mat_rand
                       )
                       
-                      #list(list(output = output))
-                      
                       list(output)
                       
                     }
@@ -667,4 +655,4 @@ stopCluster(cl)
 
 rm(P)
 
-save.image(file = "real_data_partA8.Rdata")
+save.image(file = "real_data_partA.Rdata")
