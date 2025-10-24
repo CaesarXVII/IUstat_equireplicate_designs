@@ -449,7 +449,7 @@ MMD_rand_perm_rbf_tst <- function(X,Y,r,sig,n_perm=1000,alpha=0.05){
   
   D_size <- n*r/2
   
-  #D_rand <- randes_full_k2(n = n,B = D_size)
+  #D_rand <- randes_full_k2(n = n,B = D_size) #if you want to use random designs instead
   D_rand <- equirep_even(n = n,r = r)[[2]]
   
   rand_mmd <- mean(mmd_iustat(X = X,Y = Y,D = D_rand,kernel_function = rbf_kernelpp, kernel_params = list(sigma = sig)))

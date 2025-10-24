@@ -4,8 +4,6 @@
 
 source("sim_study_functions.R")
 
-load("C10_list.Rdata") #CIFAR-10 images
-
 library(MASS)
 
 library(ggplot2)
@@ -26,7 +24,7 @@ t_odd <- system.time({
   
 })
 
-## Simulation Study 1 - CLT validation (see Theorem 3.8 and Corollary 3.10) ##
+## Simulation Study 1 - CLT validation (see Theorem 2 and Corollary 2) ##
 
 n_vec <- c(100,200,400,800,1600) 
 
@@ -264,7 +262,7 @@ stopCluster(cl)
 
 save.image(file = "sim_study_two.Rdata")
 
-## Simulation Study 3 - CLT validation for k>2 (see Theorem 3.8) ##
+## Simulation Study 3 - CLT validation for k>2 (see Theorem 2) ##
 
 eta <- function(x) 2^x
 
@@ -558,6 +556,56 @@ stopCluster(cl)
 
 save.image(file = "sim_study_four.Rdata")
 
+## ===== CIFAR-10 per-class standardized matrices P_0..P_9 =====
+
+# 0) Download & extract (skip if already present)
+
+base_url <- "https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz"
+tgz <- "cifar-10-binary.tar.gz"
+out_dir <- "cifar10_bin"
+if (!dir.exists(out_dir)) {
+  if (!file.exists(tgz)) download.file(base_url, tgz, mode = "wb")
+  untar(tgz, exdir = out_dir)
+}
+
+# 1) Reader for one CIFAR-10 binary batch (returns flat X and labels y)
+
+read_cifar10_flat <- function(path) {
+  con <- file(path, "rb"); on.exit(close(con))
+  bytes_per_img <- 1L + 3072L
+  raw <- readBin(con, what = "raw", n = file.info(path)$size)
+  n   <- length(raw) / bytes_per_img
+  stopifnot(n == floor(n))
+  M   <- matrix(as.integer(raw), ncol = bytes_per_img, byrow = TRUE)
+  y   <- as.integer(M[, 1])
+  X   <- matrix(as.numeric(M[, -1, drop = FALSE]), nrow = n)  # n x 3072
+  list(X = X, y = y)
+}
+
+# 2) Load all 5 train batches + test into one big object (n x 3072) and labels
+
+batch_files <- file.path(out_dir, "cifar-10-batches-bin",
+                         c(sprintf("data_batch_%d.bin", 1:5), "test_batch.bin")
+)
+parts <- lapply(batch_files, read_cifar10_flat)
+X_all <- do.call(rbind, lapply(parts, `[[`, "X"))   # 60000 x 3072
+y_all <- unlist(lapply(parts, `[[`, "y"), use.names = FALSE)  # length 60000
+
+# 3) Pixel scaling + feature standardization (robust defaults for Gaussian MMD)
+#    - Scale pixel intensities to [0,1]
+#    - Z-score each column: (x - mean) / sd
+
+X_scaled <- X_all / 255
+mu <- colMeans(X_scaled)
+sdv <- sqrt(pmax(colMeans((X_scaled - rep(mu, each = nrow(X_scaled)))^2), 1e-12))
+X_std <- sweep(sweep(X_scaled, 2, mu, `-`), 2, sdv, `/`)  # standardized n x 3072
+
+# 4) Split into per-class matrices P_0..P_9 (each is n_k x 3072)
+
+P <- lapply(0:9, function(k) X_std[y_all == k, , drop = FALSE])
+
+names(P) <- paste0("P_", 0:9)
+
 ## Simulation Study 5 - Real Data Example (Power, Type I error, Computational burden) ##
 
 lab_CIFAR10 <- c("airplane", "automobile", "bird","cat","deer","dog","frog","horse","ship","truck")
@@ -655,4 +703,4 @@ stopCluster(cl)
 
 rm(P)
 
-save.image(file = "real_data_partA.Rdata")
+save.image(file = "real_data.Rdata")
