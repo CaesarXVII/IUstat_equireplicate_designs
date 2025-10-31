@@ -166,7 +166,7 @@ coprimes <- function(n) {
   Filter(function(g) gcd(g, n) == 1L, 1L:(n - 1L))
 }
 
-cyclic_design <- function(n = 37,k = 3, r=3, eta= 2^x) {
+cyclic_design <- function(n = 37,k = 3, r=3, eta= function(x){2^x}) {
   if (k < 2L) {stop("k must be ≥ 2")}
   
   if (r > k*length(coprimes(n))) {stop("r must be smaller than k*phi(n)")}
@@ -174,6 +174,10 @@ cyclic_design <- function(n = 37,k = 3, r=3, eta= 2^x) {
   if (r %% k != 0) {
     stop("r must be divisible by k.")
   }
+  
+  if (n <= 3 * eta(k-1)*(eta(k-1) - eta(0))) {
+    warning("n <= 3 * eta(k-1)*(eta(k-1) - eta(0)). There may be duplicate blocks!!!")
+    }
   
   G  <- coprimes(n)[1:(r/k)]                     # all admissible multipliers (injective case only)
   
