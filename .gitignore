@@ -1,0 +1,27 @@
+# R session files
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+
+# RStudio project files
+*.Rproj
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+*.swp
+
+# Output and cache directories
+*/cache/
+*/__pycache__/
+*/.Rcheck/
+*/.Rproj.user/
+*/.Rhistory
+*/.RData
+.DS_Store
+
+# Package build artifacts
+*.tar.gz
+*.Rcheck/
